@@ -18,6 +18,28 @@ app.use(
 app.use(express.json())
 
 
+//routes
+
+app.post("/person", async(req, res) => {
+
+	const {name, salary, approved} = req.body
+
+	const person = {
+		name,
+		salary,
+		approved
+	}
+
+	try {
+		await Person.create(person)
+
+		res.status(201)
+	} catch (error) {
+		res.status(500).json({error : error})
+	}
+})
+
+
 //endpoint
 
 app.get("/", (req, res) => {
