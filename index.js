@@ -1,7 +1,11 @@
 //initializing packages
 const express = require("express")
 
+const mongoose = require("mongoose")
+
 const app = express()
+
+const Person = require("./models/Person")
 
 //read JSON 
 
@@ -20,6 +24,17 @@ app.get("/", (req, res) => {
 	res.json("status: 200")
 })
 
+mongoose.connect('mongodb+srv://utopic:gWOq2rhn2ebzhbaX@nodecluster.rfi14.mongodb.net/?retryWrites=true&w=majority')
+.then(() => {
 
-//ports
-app.listen(3000)
+	console.log("Connected");
+	app.listen(3000)
+
+})
+.catch((err) => {
+	console.log(err)
+})
+
+//password gWOq2rhn2ebzhbaX
+
+//mongodb+srv://utopic:gWOq2rhn2ebzhbaX@nodecluster.rfi14.mongodb.net/?retryWrites=true&w=majority
