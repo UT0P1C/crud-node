@@ -2,7 +2,7 @@ const router = require("express").Router()
 
 const Person = require("../models/Person")
 
-//CREATE (C)RUD
+//CREATE (C)RUD - POST
 
 router.post("/", async(req, res) => {
 
@@ -10,6 +10,7 @@ router.post("/", async(req, res) => {
 
 	if(!name){
 		res.status(422).json({error: "Erro ao processar, verifique as informações e tente novamente!"})
+		return
 	}
 
 	const person = {
@@ -27,7 +28,7 @@ router.post("/", async(req, res) => {
 	}
 })
 
-//Read - C(R)UD
+//Read - C(R)UD - GET
 
 router.get('/', async(req,res) => {
 	
@@ -50,10 +51,50 @@ router.get('/:id', async(req,res) => {
 	try {
 		const person = await Person.findOne({_id: id})
 		
+		if(!person){
+			res.status(422).json({message: "Usuário não encontrado!"})
+			return
+		}
+
 		res.status(200).json(person)
+
 	} catch (error) {
 		res.status(500).json({error: error})
 	}
 })
+
+//Update CR(U)D - PUT/PATCH
+
+router.patch('/:id', async(req, res) => {
+	const id = req.params.id;
+
+	const {name, salary, approved} = req.body
+
+	const person = {
+		name,
+		salary,
+		approved
+	}
+
+	try{
+		const updatedPerson = await Person.updateOne({_id: id, person});
+
+		//valida se o usuario existe
+		
+		console.log(updatedPerson);
+
+		if(updatedPerson.matchedCount == 0){
+			res.status(422).json({message: "Usuário não encontrado!"})
+			return
+		}
+
+		res.status(200).json(person)
+	}catch(error){
+		res.status(500).json({message:"Erro ao atualizar usuário"})
+	}
+})
+
+
+//DELETE - CRU(D)
 
 module.exports = router
