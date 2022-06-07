@@ -1,4 +1,6 @@
 //initializing packages
+require('dotenv').config()
+
 const express = require("express")
 
 const mongoose = require("mongoose")
@@ -28,7 +30,13 @@ app.get("/", (req, res) => {
 	res.json("status: 200")
 })
 
-mongoose.connect('mongodb+srv://utopic:gWOq2rhn2ebzhbaX@nodecluster.rfi14.mongodb.net/?retryWrites=true&w=majority')
+//mongoose
+
+const DB_USER = process.env.DB_USER;
+
+const DB_PASS = process.env.DB_PASS;
+
+mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@nodecluster.rfi14.mongodb.net/?retryWrites=true&w=majority`)
 .then(() => {
 
 	console.log("Connected")
@@ -38,7 +46,3 @@ mongoose.connect('mongodb+srv://utopic:gWOq2rhn2ebzhbaX@nodecluster.rfi14.mongod
 .catch((err) => {
 	console.log(err)
 })
-
-//password gWOq2rhn2ebzhbaX
-
-//mongodb+srv://utopic:gWOq2rhn2ebzhbaX@nodecluster.rfi14.mongodb.net/?retryWrites=true&w=majority
